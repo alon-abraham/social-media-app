@@ -1,16 +1,17 @@
-const express = require('express');  // Use require instead of import
-const http = require('http');
-const { Server } = require('socket.io');  // Use require for Socket.io
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
+import express from 'express';
+import http from 'http';
+import { Server } from 'socket.io';  // Socket.io import
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cors from 'cors';
 
-// Import Routes using require
-const authRoutes = require('./routes/auth');
-const postRoutes = require('./routes/post');
-const followRoutes = require('./routes/follow');
-const chatRoutes = require('./routes/chat');
+// Import Routes
+import authRoutes from './routes/auth.js';
+import postRoutes from './routes/post.js';
+import followRoutes from './routes/follow.js';
+import chatRoutes from './routes/chat.js';
 
+// Initialize environment variables
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
@@ -43,12 +44,10 @@ mongoose
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
-  // Listen for message events from the client
   socket.on('sendMessage', ({ sender, receiver, message }) => {
     io.emit('receiveMessage', { sender, receiver, message });
   });
 
-  // Disconnect event
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
   });
