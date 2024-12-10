@@ -2,13 +2,14 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
-import { verifyToken } from '../middleware/auth.js';  // Correct import for verifyToken
+import { verifyToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Register a new user
+// Register Route
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
+
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -16,22 +17,24 @@ router.post('/register', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = new User({
       username,
       email,
       password: hashedPassword,
     });
-    await newUser.save();
 
+    await newUser.save();
     res.status(201).json('User registered successfully.');
   } catch (err) {
     res.status(500).json(err.message);
   }
 });
 
-// Login user and generate JWT token
+// Login Route
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const user = await User.findOne({ email });
     if (!user) {
@@ -44,13 +47,14 @@ router.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+
     res.status(200).json({ user, token });
   } catch (err) {
     res.status(500).json(err.message);
   }
 });
 
-// Get the authenticated user's details (protected route)
+// Protected Route (Check User Profile)
 router.get('/me', verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
