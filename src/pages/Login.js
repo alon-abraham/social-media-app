@@ -1,9 +1,8 @@
-// /client/src/components/Login.js
+// /client/src/pages/Login.js
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../redux/authSlice';  // Correct relative path
-
+import { loginUser } from '../redux/authSlice';  // Corrected import path
 
 const Login = () => {
   const [email, setEmail] = useState('');
