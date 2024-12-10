@@ -1,15 +1,15 @@
-import express from 'express';  // Using ESM imports if your Node.js supports it
-import http from 'http';
-import { Server } from 'socket.io';  // Socket.io for real-time messaging
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import cors from 'cors';
+const express = require('express');  // Use require instead of import
+const http = require('http');
+const { Server } = require('socket.io');  // Use require for Socket.io
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const cors = require('cors');
 
-// Import Routes
-import authRoutes from './routes/auth.js';
-import postRoutes from './routes/post.js';
-import followRoutes from './routes/follow.js';
-import chatRoutes from './routes/chat.js';
+// Import Routes using require
+const authRoutes = require('./routes/auth');
+const postRoutes = require('./routes/post');
+const followRoutes = require('./routes/follow');
+const chatRoutes = require('./routes/chat');
 
 dotenv.config();
 const app = express();
