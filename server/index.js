@@ -1,6 +1,6 @@
 import express from 'express';
 import http from 'http';
-import { Server } from 'socket.io';  // Socket.io import
+import { Server } from 'socket.io';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -34,11 +34,11 @@ app.use('/api/posts', postRoutes);
 app.use('/api/follow', followRoutes);
 app.use('/api/chat', chatRoutes);
 
-// MongoDB Connection
+// MongoDB Connection (removed deprecated options)
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.MONGO_URI)  // Removed useNewUrlParser and useUnifiedTopology
   .then(() => console.log('MongoDB Connected'))
-  .catch((err) => console.log(err.message));
+  .catch((err) => console.log('MongoDB connection error:', err.message));
 
 // Real-Time Chat Logic with Socket.io
 io.on('connection', (socket) => {
