@@ -35,8 +35,7 @@ app.use('/api/follow', followRoutes);
 app.use('/api/chat', chatRoutes);
 
 // MongoDB Connection (removed deprecated options)
-mongoose
-  .connect(process.env.MONGO_URI)  // Removed useNewUrlParser and useUnifiedTopology
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected'))
   .catch((err) => console.log('MongoDB connection error:', err.message));
 
