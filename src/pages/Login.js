@@ -1,47 +1,37 @@
-// /client/src/pages/Login.js
-
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../redux/authSlice';  // Corrected import path
+import axios from 'axios';
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+function Login() {
+  const [formData, setFormData] = useState({ email: '', password: '' });
 
-  const dispatch = useDispatch();
-  const { loading, error, user } = useSelector((state) => state.auth);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(loginUser({ email, password }));
+    try {
+      const { data } = await axios.post('/api/auth/login', formData);
+      localStorage.setItem("token", data.token);
+      alert("Login Successful!");
+      window.location = "/dashboard";
+    } catch (err) {
+      console.error(err.message);
+    }
   };
 
   return (
-    <div className="login-container">
+    <form onSubmit={handleSubmit}>
       <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
-      {error && <p className="error-msg">{error}</p>}
-      {user && <p className="success-msg">Welcome, {user.username}!</p>}
-    </div>
+      <input
+        type="email"
+        placeholder="Email"
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+      />
+      <button type="submit">Login</button>
+    </form>
   );
-};
+}
 
 export default Login;
