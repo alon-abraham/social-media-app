@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../redux/authSlice';
+import { loginUser } from '../redux/authSlice';  // Correct relative path
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
