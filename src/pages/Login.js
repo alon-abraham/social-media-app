@@ -1,37 +1,47 @@
+// /client/src/components/Login.js
+
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../redux/authSlice';
 
-function Login() {
-  const [formData, setFormData] = useState({ email: '', password: '' });
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSubmit = async (e) => {
+  const dispatch = useDispatch();
+  const { loading, error, user } = useSelector((state) => state.auth);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const { data } = await axios.post('/api/auth/login', formData);
-      localStorage.setItem("token", data.token);
-      alert("Login Successful!");
-      window.location = "/dashboard";
-    } catch (err) {
-      console.error(err.message);
-    }
+    dispatch(loginUser({ email, password }));
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className="login-container">
       <h2>Login</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-      />
-      <button type="submit">Login</button>
-    </form>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
+      </form>
+      {error && <p className="error-msg">{error}</p>}
+      {user && <p className="success-msg">Welcome, {user.username}!</p>}
+    </div>
   );
-}
+};
 
 export default Login;
