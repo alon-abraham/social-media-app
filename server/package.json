@@ -1,0 +1,14 @@
+{
+    "name": "social-media-app",
+    "version": "0.1.0",
+    "type": "module",  
+    "scripts": {
+      "start": "nodemon index.js"
+    },
+    "dependencies": {
+      "express": "^4.21.2",
+      "mongoose": "^8.8.4",
+      "socket.io": "^4.8.1"
+    }
+  }
+  
